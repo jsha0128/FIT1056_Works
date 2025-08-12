@@ -50,6 +50,9 @@ def list_students():
 def list_teachers():
     """Prints all teachers in the database."""
     # TODO: Implement the logic to list all teachers, similar to list_students().
+    if not teacher_db:
+        print("No teachers in the system.")
+        return
     print("\n--- Teacher List ---")
     for teacher in teacher_db:
         print(f"  ID: {teacher.id}, Name: {teacher.name}, Speciality: {teacher.speciality}")
@@ -62,13 +65,24 @@ def find_students(term):
     # add them to your results list.
     # After the loop, if the results list is empty, print "No match found."
     # Otherwise, print the details for each student in the results list.
-    pass
+    for student in student_db:
+        if term.lower() in student.name.lower():
+            print(f"  ID: {student.id}, Name: {student.name}, Enrolled in: {student.enrolled_in}")
+            return
+        else:
+            print("No match found.")
 
 def find_teachers(term):
     """Finds teachers by name or speciality."""
     # TODO: Implement this function similar to find_students, but check
     # for the term in BOTH the teacher's name AND their speciality.
-    pass
+    print(f"\n--- Finding Teachers matching '{term}' ---")
+    for teacher in teacher_db:
+        if term.lower() in teacher.name.lower() or term.lower() in teacher.speciality.lower():
+            print(f"  ID: {teacher.id}, Name: {teacher.name}, Speciality: {teacher.speciality}")
+            return
+        else:
+            print("No match found.")
 
 # --- Front Desk Functions ---
 def find_student_by_id(student_id):
