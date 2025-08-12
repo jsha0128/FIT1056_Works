@@ -4,7 +4,7 @@ How to run:
 1. Run the application
 2. Use the menu to:
    1. Register new student  
-	 2. Enrol existing student
+	2. Enrol existing student
    3. Look up a student or teacher by name or specialty
    4. List all
    5. Quit application
