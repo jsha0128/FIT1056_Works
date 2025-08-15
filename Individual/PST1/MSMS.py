@@ -96,12 +96,11 @@ def find_student_by_id(student_id):
 
 def front_desk_register(name, instrument):
     """High-level function to register a new student and enrol them."""
-    global next_student_id
     # TODO: Create a new Student object, add it to student_db, and increment the ID.
+    global next_student_id
     new_student = Student(next_student_id, name)
     student_db.append(new_student)
     next_student_id += 1
-    
     # TODO: Immediately call front_desk_enrol() using the new student's ID and the provided instrument.
     front_desk_enrol(new_student.id, instrument)
     print(f"Front Desk: Successfully registered '{name}' and enrolled them in '{instrument}'.")
