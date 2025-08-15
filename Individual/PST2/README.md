@@ -1,8 +1,8 @@
 MSMS PST2   
 Features:           
-    -Updates data to msms.json
-    -Add, update or remove teachers
-    -Remove students or print student ID cards
+    -Updates data to msms.json   
+    -Add, update or remove teachers    
+    -Remove students or print student ID cards   
     -Track student check in with times
 
 Run with pst2_main.py
