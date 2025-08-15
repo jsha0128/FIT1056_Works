@@ -67,8 +67,6 @@ def update_teacher(teacher_id, **fields):
 def remove_student(student_id):
     """Removes a student from the data store."""
     # TODO: Find the student dictionary in app_data['students'] with the matching ID.
-    for student in app_data['students']:
-        if student['id'] == student_id:
     # If found, use the .remove() method on the list to delete it.
     for student in app_data['students']:
         if student['id'] == student_id:
@@ -164,7 +162,7 @@ def main():
         elif choice == '3':
             # TODO: Get teacher_id and new details, then call update_teacher().
             teacher_id = int(input("Enter Teacher ID: "))
-            detail = string(input("Enter new detail (e.g., speciality): "))
+            detail = str(input("Enter new detail (e.g., speciality): "))
             update_teacher(teacher_id, detail)
             # Example: update_teacher(1, speciality="Advanced Piano")
             made_change = True
