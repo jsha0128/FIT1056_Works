@@ -76,3 +76,45 @@ class ScheduleManager:
             if course.id == course_id:
                 return course
         return None
+    def find_teacher_by_id(self, teacher_id):
+        for teacher in self.teachers:
+            if teacher.id == teacher_id:
+                return teacher
+        return None
+
+    def get_daily_roster(self, day):
+        roster = []
+        for course in self.courses:
+            if course.day.lower() == day.lower():
+                teacher = self.find_teacher_by_id(course.teacher_id)
+                roster.append({
+                    "course_name": course.name,
+                    "teacher_name": teacher.name,
+                    "start_time": course.start_time,
+                    "room": course.room
+                })
+        return roster
+    
+    def switch_student_course(self, student_id, from_course_id, to_course_id):
+        """Switches a student's enrolled course"""
+        student = self.find_student_by_id(student_id)
+        from_course = self.find_course_by_id(from_course_id)
+        to_course = self.find_course_by_id(to_course_id)
+
+        if not student or not from_course or not to_course:
+            print("Error: Invalid student or course ID")
+            return False
+        if from_course_id not in student.enrolled_courses:
+            print(f"Error: Student {student.name} is not enrolled in {from_course.name}")
+            return False
+        if to_course_id in student.enrolled_courses:
+            print(f"Error: Student {student.name} is already enrolled in {to_course.name}")
+            return False
+
+        # Remove student from the old course
+        from_course.remove_student(student_id)
+        # Add student to the new course
+        to_course.add_student(student_id)
+        self._save_data()
+        print(f"Successfully switched {student.name} from {from_course.name} to {to_course.name}")
+        return True
