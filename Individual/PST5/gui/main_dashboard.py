@@ -1,7 +1,6 @@
 # gui/main_dashboard.py
 import streamlit as st
 from app.schedule import ScheduleManager
-from app.student import StudentUser
 from gui.student_pages import show_student_management_page
 from gui.roster_pages import show_roster_page
 
@@ -16,23 +15,13 @@ def launch():
 
     st.sidebar.title("MSMS Navigation")
     # Create a radio button menu in the sidebar for page navigation.
-    page = st.sidebar.radio("Go to", ["Student Management", "Daily Roster", "Find Student by ID", "Payments (stub)"])
+    page = st.sidebar.radio("Go to", ["Student Management", "Daily Roster", "Payments (stub)"])
 
     # Use an if/elif block to call the correct function to render the selected page.
     if page == "Student Management":
         show_student_management_page(st.session_state.manager)
     elif page == "Daily Roster":
         show_roster_page(st.session_state.manager)
-    elif page == "Find Student by ID":
-        st.header("Find Student by ID")
-        student_id = st.number_input("Enter Student ID:", min_value=1, step=1)
-        for student in st.session_state.manager.students:
-            if student.id == student_id:
-                st.write(f"Student Found: ID {student.id}, Name: {student.name}, Instrument: {student.instrument}")
-                return student
-        st.error("No student found with that ID.")
-
-    
     elif page == "Payments (stub)":
         st.header("Payments")
         st.warning("This feature will be implemented in PST5.")

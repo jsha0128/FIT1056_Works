@@ -22,7 +22,7 @@ def show_student_management_page(manager):
             if reg_name and reg_instrument:
                 new_student = manager.register_new_student(reg_name, reg_instrument)
                 if new_student:
-                    st.success(f"Successfully registered {reg_name}!")
+                    st.success(f"Successfully registered {reg_name} (ID: {new_student.id})!")
                     # You can use st.balloons() for extra flair.
                 else:
                     st.error(f"Could not register student. A teacher for {reg_instrument} might not be available.")

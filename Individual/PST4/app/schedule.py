@@ -5,7 +5,7 @@ import datetime
 
 class ScheduleManager:
     """The main controller for all business logic and data handling."""
-    def __init__(self, data_path="data/msms.json"):
+    def __init__(self, data_path="msms.json"):
         self.data_path = data_path
         self.students = []
         self.teachers = []
@@ -47,6 +47,24 @@ class ScheduleManager:
         with open(self.data_path, 'w') as f:
             json.dump(data_to_save, f, indent=4)
 
+    def register_new_student(self, name, instrument):
+        """Registers a new student and assigns them a unique ID."""
+        next_student_id = len(self.students) + 1
+        new_student = StudentUser(name=name, id=next_student_id, instrument=instrument)
+        self.students.append(new_student)
+        self._save_data()
+        return new_student
+    
+    def unregister_student(self, student_id):
+        """Unregisters a student by their ID"""
+        student = self.find_student_by_id(student_id)
+        if student:
+            self.students.remove(student)
+            self._save_data()
+            return True
+        return False
+      
+    
     def check_in(self, student_id, course_id):
         """Records a student's attendance for a course after validation."""
         # This implementation remains the same, but it will now function correctly.
@@ -65,12 +83,6 @@ class ScheduleManager:
         self._save_data() # This will now correctly save the attendance log.
         print(f"Success: Student {student.name} checked into {course.name}.")
         return True
-
-    def find_student_by_id(self, student_id):
-        for student in self.students:
-            if student.id == student_id:
-                return student
-        return None
     
     def find_course_by_id(self, course_id):
         for course in self.courses:

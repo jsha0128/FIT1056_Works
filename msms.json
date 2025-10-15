@@ -1,0 +1,43 @@
+{
+    "students": [
+        {
+            "id": 1,
+            "name": "Jeff",
+            "instrument": "Piano",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 2,
+            "name": "Tommy",
+            "instrument": "Cello",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 3,
+            "name": "Alice Johnson",
+            "instrument": "Piano",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 4,
+            "name": "Bob Williams",
+            "instrument": "Acoustic Guitar Fundamentals",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 5,
+            "name": "Simon",
+            "instrument": "Drums",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 6,
+            "name": "Hello",
+            "instrument": "piano",
+            "enrolled_course_ids": []
+        }
+    ],
+    "teachers": [],
+    "courses": [],
+    "attendance": []
+}
