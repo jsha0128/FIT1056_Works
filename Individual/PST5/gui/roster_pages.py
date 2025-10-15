@@ -1,6 +1,7 @@
 # gui/roster_pages.py
 import streamlit as st
 import pandas as pd
+from app.admin_utils import backup_data
 
 def show_roster_page(manager):
     """Renders the daily roster and check-in functionality."""
@@ -36,3 +37,9 @@ def show_roster_page(manager):
             else:
                 # The manager's print statements will go to the console, but we can add a GUI error too.
                 st.error("Check-in failed. See console for details. (Is the student enrolled in that course?)")
+
+    #backup button
+    st.subheader("Backup Data")
+    if st.button("Backup Data Now"):
+        backup_data(manager)
+        st.success("Backup completed successfully.")

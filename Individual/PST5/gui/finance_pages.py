@@ -1,6 +1,7 @@
 # gui/finance_pages.py
 import streamlit as st
 import pandas as pd
+from app.admin_utils import backup_data
 
 def show_finance_page(manager):
     """Renders the UI for all financial operations."""
@@ -38,3 +39,9 @@ def show_finance_page(manager):
             st.dataframe(df)
         else:
             st.info("This student has no payment history.")
+
+    #backup button
+    st.subheader("Backup Data")
+    if st.button("Backup Data Now"):
+        backup_data(manager)
+        st.success("Backup completed successfully.")
