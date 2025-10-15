@@ -41,7 +41,28 @@ def test_record_payment_and_history(fresh_manager):
 def test_get_payment_history_no_results(fresh_manager):
     # TODO: Implement a test that checks if get_payment_history
     # returns an empty list for a student with no payments.
-    pass
+    student_id_to_test = 99999
+    history = fresh_manager.get_payment_history(student_id_to_test)
+    assert history == []
 
-# tests/test_schedule_manager.py
-# ... (fixture setup) ...
+def test_cannot_find_student(fresh_manager):
+    student_id_to_test = 99999
+    result = fresh_manager.check_in(student_id_to_test, 1)
+    assert not result
+
+def test_register_student(fresh_manager):
+    fresh_manager.register_student("Alice", "Smith", "Piano")
+    assert len(fresh_manager.students) == 1
+    assert fresh_manager.students[0].first_name == "Alice"
+    assert fresh_manager.students[0].last_name == "Smith"
+    assert fresh_manager.students[0].instrument == "Piano"
+    assert fresh_manager.students[0].id == 1
+
+def test_check_in(fresh_manager):
+    fresh_manager.register_student("Bob", "Johnson", "Guitar")
+    student_id = fresh_manager.students[0].id
+    result = fresh_manager.check_in(student_id, 1)
+    assert result
+    assert len(fresh_manager.attendance_log) == 1
+    assert fresh_manager.attendance_log[0]['student_id'] == student_id
+    assert fresh_manager.attendance_log[0]['course_id'] == 1
