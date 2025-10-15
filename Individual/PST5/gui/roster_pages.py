@@ -2,15 +2,26 @@
 import streamlit as st
 import pandas as pd
 from app.admin_utils import backup_data
+from app.schedule import ScheduleManager
 
 def show_roster_page(manager):
     """Renders the daily roster and check-in functionality."""
     st.header("Daily Roster")
 
-    # --- View Roster Section (remains the same) ---
+    # Get available days from the manager
     day = st.selectbox("Select a day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])
-    # ... (code to display the dataframe) ...
-    
+
+    # --- View Roster Section (remains the same) ---
+    roster = manager.get_daily_roster(day)
+    if roster:
+        df = pd.DataFrame([{
+            "Course": course.name,
+            "Students": ", ".join([s.name for s in course.enrolled_students])
+        } for course in roster])
+        st.dataframe(df)
+    else:
+        st.info(f"No classes scheduled for {day}.")
+
     # --- Student Check-in Section (now works correctly) ---
     st.subheader("Student Check-in")
     with st.form("check_in_form"):

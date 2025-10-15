@@ -1,0 +1,18 @@
+{
+    "students": [
+        {
+            "id": 1,
+            "name": "Josh ",
+            "instrument": "Drums",
+            "enrolled_course_ids": []
+        },
+        {
+            "id": 2,
+            "name": "Tommy",
+            "instrument": "Cello",
+            "enrolled_course_ids": []
+        }
+    ],
+    "teachers": [],
+    "courses": []
+}

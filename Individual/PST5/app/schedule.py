@@ -22,20 +22,14 @@ class ScheduleManager:
         try:
             with open(self.data_path, 'r') as f:
                 data = json.load(f)
-                # The logic here remains the same, but the source of the Course class has changed.
-                # TODO: For each dictionary in data['students'], create a StudentUser object and append to self.students.
-                for student_dict in data.get('students', []):
-                    student = StudentUser(student_dict['user_id'], student_dict['name'])
-                    student.enrolled_course_ids = student_dict.get('enrolled_course_ids', [])
-                    self.students.append(student)
-                # TODO: Do the same for teachers (creating TeacherUser objects).
-                for teacher_dict in data.get('teachers', []):
-                    teacher = TeacherUser(teacher_dict['user_id'], teacher_dict['name'])
-                    self.teachers.append(teacher)
-                # TODO: Do the same for courses (creating Course objects).
-                for course_dict in data.get('courses', []):
-                    course = Course(course_dict['course_id'], course_dict['title'], course_dict['teacher_id'])
-                    self.courses.append(course)
+                # TODO: Load students, teachers, and courses as before.
+                self.students = [StudentUser(**s) for s in data.get("students", [])]
+                self.teachers = [TeacherUser(**t) for t in data.get("teachers", [])]
+                self.courses = [Course(**c) for c in data.get("courses", [])]
+
+                # TODO: Correctly load the attendance log.
+                # Use .get() with a default empty list to prevent errors if the key doesn't exist.
+                self.attendance_log = data.get("attendance", [])
         except FileNotFoundError:
             print("Data file not found. Starting with a clean state.")
     
@@ -52,7 +46,7 @@ class ScheduleManager:
         # Write the result to the JSON file.
         with open(self.data_path, 'w') as f:
             json.dump(data_to_save, f, indent=4)
-        pass
+
 
     def register_new_student(self, name, instrument):
         """Registers a new student and assigns them a unique ID."""
@@ -126,48 +120,6 @@ class ScheduleManager:
             return True
         return False
     
-    def add_course(self, name, teacher_id, day, start_time, room):
-        """Adds a new course to the schedule."""
-        next_course_id = len(self.courses) + 1
-        new_course = Course(name=name, id=next_course_id, teacher_id=teacher_id, day=day, start_time=start_time, room=room)
-        self.courses.append(new_course)
-        self._save_data()
-        logging.info(f"New course added: {new_course.name} (ID: {new_course.id})")
-        return new_course
-    
-    def remove_course(self, course_id):
-        """Removes a course by its ID."""
-        course = self.find_course_by_id(course_id)
-        if course:
-            self.courses.remove(course)
-            self._save_data()
-            logging.info(f"Course removed: {course.name} (ID: {course.id})")
-            return True
-        return False
-
-    def update_course(self, course_id, name=None, teacher_id=None, day=None, start_time=None, room=None):
-        """Updates an existing course."""
-        course = self.find_course_by_id(course_id)
-        if not course:
-            print("Error: Course not found.")
-            return None
-
-        # Update course attributes if new values are provided
-        if name:
-            course.name = name
-        if teacher_id:
-            course.teacher_id = teacher_id
-        if day:
-            course.day = day
-        if start_time:
-            course.start_time = start_time
-        if room:
-            course.room = room
-
-        self._save_data()
-        logging.info(f"Course updated: {course.name} (ID: {course.id})")
-        return course
-
     def check_in(self, student_id, course_id):
         """Records a student's attendance for a course after validation."""
         # This implementation remains the same, but it will now function correctly.
@@ -212,11 +164,14 @@ class ScheduleManager:
                 teacher = self.find_teacher_by_id(course.teacher_id)
                 roster.append({
                     "course_name": course.name,
-                    "teacher_name": teacher.name,
-                    "start_time": course.start_time,
-                    "room": course.room
+                    "teacher_name": teacher.name if teacher else "Unknown",
+                    "enrolled_students": [self.find_student_by_id(sid) for sid in course.enrolled_student_ids]
                 })
         return roster
+    
+    def get_available_days(self):
+        """Returns a sorted list of unique days with scheduled courses."""
+        return sorted({course.day for course in self.courses})
     
     def switch_student_course(self, student_id, from_course_id, to_course_id):
         """Switches a student's enrolled course"""
@@ -265,6 +220,10 @@ class ScheduleManager:
     def get_payment_history(self, student_id):
         """Returns a list of all payments for a given student."""
         # TODO: Use a list comprehension to filter self.finance_log
+        finance_log = getattr(self, 'finance_log', [])
+        if not finance_log:
+            print("No finance log found.")
+            return []
         # and return only the records that match the student_id.
         return [p for p in self.finance_log if p['student_id'] == student_id]
 
